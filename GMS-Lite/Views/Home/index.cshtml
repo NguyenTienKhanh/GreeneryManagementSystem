@@ -1,0 +1,806 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<html>
+<head>
+    <title>Greenery Management System</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('body').bootstrapMaterialDesign();
+        });
+    </script>
+    <link rel="stylesheet" href="~/google api/style.css" />
+</head>
+<body>
+    <!--this is the map-->
+    <div id="map"></div>
+    <div class="card" id="slide-panel">
+        <div class="card my-container" id="filter-container">
+            <!--Filter class-->
+            <div class="form-group">
+                <div class="filter-header">
+                    <br />
+                    <center><h3 class="mb-4">Lọc cây theo loại</h3></center>
+                    <br />
+                </div>
+                <div class="collapse-tabs">
+                    <div class="trees-list">
+                        <div class="list-button" id="tree-collapse">
+                        </div>
+                        <div class="mb-2"></div>
+                        <div class="form-row mb-2">
+                            <div class="col">
+                                <center><button type="button" id="clear-filter-btn" style="background-color: gainsboro;font-weight: bold" class="btn btn-info">Xóa lựa chọn lọc</button></center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form đăng kí -->
+        <div class="card my-container" id="seeding-container">
+            <form id="registerTree" class=" p-5.2">
+                <br>
+                <center><h3 class="mb-4">Đăng kí cây</h3></center>
+                <!-- Region -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Phân Vùng:</label>
+                            <select name="seedingRegionSelect" id="seeding-region-select" class="a browser-default custom-select mb-2">
+                                <!--JS will take care of this-->
+                            </select>
+                            <span id="seeding-region-select-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- nhom cay va loai cay -->
+                <div class="form-row mb-2">
+                    <div class="col" style="display:none">
+                        <div class="form-group">
+                            <label> Nhóm cây:</label>
+                            <!--hiện tại chỉ được tạo cây thân gỗ-->
+                            <select id="seeding-tree-group-select" class="browser-default custom-select mb-2" disabled>
+                                <option value="1" selected>Thân Gỗ</option>
+                                <option value="2">Thân Thảo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Loại cây:</label>
+                            <select name="seedingTreeTypeSelect" id="seeding-tree-type-select" class="browser-default custom-select mb-2">
+                                <!--JS will take care of this-->
+                            </select>
+                            <span id="seeding-tree-type-select-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- chieu cao va kich thuoc than -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Chiều cao cây:</label>
+                            <input type="text" name="seedingHeightInput" id="seeding-height-input" class="a form-control" placeholder="Tính theo mét">
+                            <span id="seeding-height-input-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Kích thước thân:</label>
+                            <input type="text" name="seedingWidthInput" id="seeding-width-input" class="a form-control" placeholder="Tính theo cm">
+                            <span id="seeding-width-input-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- dia diem trong -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="map-click-position-btn" class="bmd-label-static"> Địa điểm trồng:</label>
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="map-click-position-btn" class="btn btn-info btn-block">Chọn vị trí</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <!-- Latitude -->
+                        <input type="text" name="seedingLatInput" id="seeding-lat-input" class="form-control" placeholder="Kinh Độ">
+                        <span id="seeding-lat-input-validation" class="error-message not-valid"></span>
+                    </div>
+                    <div class="col">
+                        <!-- Longtitude -->
+                        <input type="text" name="seedingLngInput" id="seeding-lng-input" class="form-control" placeholder="Vĩ Độ">
+                        <span id="seeding-lng-input-validation" class="error-message not-valid"></span>
+                    </div>
+                </div>
+                <!-- Ghi chu -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Ghi chú:</label>
+                            <textarea class="form-control rounded-1" id="seeding-description-textarea" rows="3" placeholder="Tình trạng cây"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Save and clear button -->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="seeding-save-tree-btn" class="btn btn-info my-2 btn-block">Save</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="seeding-clear-form-btn" class="btn btn-info my-2 btn-block">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        @*Form đăng kí thêm khu vực con*@
+        <div id="register-polygon-container" class="card my-container">
+
+            <form class="text-center border border-light p-5.2">
+
+                <br />
+                <h3 class="mb-4">Đăng kí khu vực</h3>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> ID phân vùng:</label>
+                            <input type="text" id="polygon-id-input" class="form-control">
+                            <span id="polygon-id-input-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Thẻ input cho người dùng nhập vào tên khu vực mới-->
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Tên khu vực mới:</label>
+                            <input type="text" id="polygon-name-input" class="form-control">
+                            <span id="polygon-name-input-validation" class="error-message not-valid"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Manager Select-->
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Nhân viên quản lý:</label>
+                            <select id="polygon-manager-select" class="a browser-default custom-select mb-2">
+                                @*JS will cover this*@
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Nút chọn để vẽ polygon trên bản đồ-->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="bmd-label-static"> Địa điểm trồng:</label>
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="register-polygon-draw-btn" class="btn btn-info btn-block">Vẽ khu vực mới trên bản đồ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Nút save và clear form đăng kí polygon-->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="register-polygon-save-tree-btn" class="btn btn-info my-2 btn-block">Save</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="register-polygon-clear-form-btn" class="btn btn-info my-2 btn-block">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+
+        </div>
+
+        @*Thống kê*@
+        <div id="statistics-container" class="card my-container">
+
+            <form class="text-center border border-light p-5.2">
+
+                <br />
+                <h3 class="mb-4">Thống Kê Cây Bị Loại Bỏ</h3>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Từ Ngày:</label>
+                            <input type="date" id="date-from-input" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label> Đến Ngày:</label>
+                            <input type="date" id="date-to-input" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!--Nút save và clear form đăng kí polygon-->
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="button" style="background-color: gainsboro;font-weight: bold" id="statistics-submit-btn" class="btn btn-info my-2 btn-block">Thống Kê</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Số lượng thống kê:</label>
+                            <input type="text" id="statistics-result-input" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+
+
+
+        @*tree name management*@
+        <div id="manage-tree-name-container" class="card my-container">
+
+            <form class="text-center border border-light p-5.2">
+                <br />
+                <h3 class="mb-4">Quản Lý Loại Cây</h3>
+
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Tạo mới:</label>
+                            <input type="text" id="manage-tree-name-input" class="form-control" placeholder="Tên loại cây mới">
+                            <button type="button" class="btn btn-primary" id="create-tree-name-btn"><img src="~/google api/img/icon/plus-icon-30.png" alt="Alternate Text" height="30" width="30" /></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row mb-2">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Tổng Loại Cây:</label>
+                            <input type="text" id="total-tree-name-input" class="a form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Tổng Số Cây</label>
+                            <input type="text" id="total-tree-input" class="a form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-wrapper-scroll-y table-responsive tree-name-table-class">
+                    <table class="table table-bordered table-hover " id="manage-tree-name-table">
+                        <thead>
+                            <tr>
+                                <th>Tên Cây</th>
+                                <th>Số lượng</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--JS will take care of this-->
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+        @*user management*@
+        <div id="manage-user-container" class="card my-container">
+
+            <form class="text-center border border-light p-5.2">
+                <br />
+                <h3 class="mb-4">Quản Lý Người Dùng</h3>
+
+                <div class="table-wrapper-scroll-y table-responsive manage-user-table-class">
+                    <table class="table table-bordered table-hover " id="manage-user-table">
+                        <thead>
+                            <tr>
+                                <th>Tên</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--JS will take care of this-->
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </form>
+        </div>
+
+
+
+        <div id="partition-container" class="card my-container">
+            <form class="text-center border border-light p-5.2">
+                <br>
+                <h3 class="mb-4">Thông tin khu vực</h3>
+                <!-- Name -->
+                <div class="form-row ">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Tên khu vực:</label>
+                            <input type="text" id="region-name-input" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+                <!-- Danh sach toa do diem -->
+                <div class="form-row ">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="bmd-label-static" style="padding:10px">Danh sách toạ độ</label>
+                            <div class="table-wrapper-scroll-y table-responsive coordinate-table-class">
+                                <table class="table table-bordered table-hover " id="coordinate-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" id='latOfPoint'>Kinh độ</th>
+                                            <th scope="col" id='lngOfPoint'>Vĩ độ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--JS will take care of this-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- manage by -->
+                <div class="form-row ">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Nhân viên quản lý:</label>
+                            <input type="text" id="region-manager-input" class="form-control" readonly>
+                            <select name="regionManagerSelect" id="region-manager-select" class="browser-default custom-select mb-2" hidden>
+                                <!--JS will take care of this-->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Number of trees and area -->
+                <div class="form-row ">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label> Số cây:</label>
+                            <input type="text" id="region-tree-quantity-input" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label> Diện tích:(m2)</label>
+                            <input type="text" id="calculateArea" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Danh sach cay có trong khu vực -->
+                <div class="form-row ">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="bmd-label-static" style="padding:10px">Danh sách cây</label>
+                            <div class="table-wrapper-scroll-y table-responsive tree-table-class">
+                                <table class="table table-bordered table-hover" id="tree-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" id='kindOfTree'>Loại cây</th>
+                                            <th scope="col" id='sumOfArea'>Số Lượng </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <button style=" position:absolute; left:80% ;display:block;background-color: gainsboro;font-weight: bold" type="button" id="edit-polygon-btn" class="btn btn-info my-2 btn-block">Edit</button>
+                        </div>
+                        <div class="col">
+                            <button style="position:absolute ; left:120% ;display:block ;background-color: gainsboro;font-weight: bold" type="button" id="delete-polygon-btn" class="btn btn-info my-2 btn-block">Delete</button>
+                        </div>
+                        <div class="col">
+                            <button style="position:absolute; left:-120% ; display: none;background-color: gainsboro;font-weight: bold" type="button" id="save-polygon-btn" class="btn btn-info my-2 btn-block">Save</button>
+                        </div>
+                        <div class="col">
+                            <button style="position:absolute ; left:-80%; display: none;background-color: gainsboro;font-weight: bold" type="button" id="cancel-polygon-btn" class="btn btn-info my-2 btn-block">Cancel</button>
+                        </div>
+                    </div>
+                }
+            </form>
+        </div>
+
+        <div id="info-container" class="card my-container">
+            <div style="margin-left:10px">
+                <h2>Greenery Management System</h2>
+                <p>Là trang web hỗ trợ việc quản lí cây xanh trong khu vực trường Đại Học Quốc Tế Miền Đông</p>
+                <br />
+                <h3>Đội ngũ phát triển: </h3>
+                <ul>
+                    <li>Nguyễn Hùng Cường - Function Developer</li>
+                    <li>Nguyễn Đại Dương - UI Developer</li>
+                    <li>Nguyễn Tiến Khánh - UI Developer</li>
+                    <li>Phạm Hoài Đức - Database Developer</li>
+                </ul>
+                <br />
+
+                <p>
+                    Thông tin chi tiết xin vui lòng liên hệ:<br />
+                    Email: <a href="mailto:cuong.nguyen.set16@eiu.edu.vn">cuong.nguyen.set16@eiu.edu.vn</a><br />
+                    Facebook: <a href="https://www.facebook.com/cuong.tranvan.984">Nguyễn Hùng Cường</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="sidebar-footer" style="width:auto">
+        <ul class="list-group">
+            <!--Initially this icon is hidden, it will be visible when the user click on the other icons below-->
+            <li class="list-group-item list-group-item-action" id="toggle" title="Close">
+                <a href="#">
+                    <!--<center><i class="fas fa-arrow-left"></i></center>-->
+                    <img src="google api/img/icon/close-icon.png" alt="Close sidebar" width="30" height="30" />
+                </a>
+            </li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="list-group-item list-group-item-action" id="seeding" title="Thêm Cây">
+                    <a href="#">
+                        <!--<i class="fas fa-seedling"></i>-->
+                        <img src="google api/img/icon/add-tree-icon.png" alt="Add new Tree" width="30" height="30" />
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="list-group-item list-group-item-action" title="Thêm Cây">
+                    <a asp-area="Identity" asp-page="/Account/Login">
+                        <!--<i class="fas fa-seedling"></i>-->
+                        <img src="google api/img/icon/add-tree-icon.png" alt="Add new Tree" width="30" height="30" />
+                    </a>
+                </li>
+            }
+            <li class="list-group-item list-group-item-action" id="filter" title="Lọc Cây">
+                <a href="#">
+                    <!--<i class="fas fa-filter"></i>-->
+                    <img src="google api/img/icon/filter-icon.png" alt="Filter Tree" width="30" height="30" />
+                </a>
+            </li>
+            <li class="list-group-item list-group-item-action" id="partition" title="Phân Vùng">
+                <a href="#">
+                    <!--<i class="fas fa-globe"></i>-->
+                    <img src="google api/img/icon/region-icon.png" alt="Region Info" width="30" height="30" />
+                </a>
+            </li>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <li class="list-group-item list-group-item-action" id="register-polygon" title="Tạo phân vùng">
+                    <a href="#">
+                        <!--<i class="fas fa-globe"></i>-->
+                        <img src="~/google api/img/icon/register-polygon-icon.png" alt="Region Info" width="30" height="30" />
+                    </a>
+                </li>
+
+                <li class="list-group-item list-group-item-action" id="manage-tree-name" title="Quản lý loại cây">
+                    <a href="#">
+                        <!--<i class="fas fa-globe"></i>-->
+                        <img src="~/google api/img/icon/tree-name-management-icon-30.png" alt="Manage Tree Name" width="30" height="30" />
+                    </a>
+
+                </li>
+
+                <li class="list-group-item list-group-item-action" id="manage-user" title="Quản lý người dùng">
+                    <a href="#">
+                        <!--<i class="fas fa-globe"></i>-->
+                        <img src="~/google api/img/icon/account-management-icon-30.png" alt="Manage Tree Name" width="30" height="30" />
+                    </a>
+
+                </li>
+            }
+
+            <li class="list-group-item list-group-item-action" id="statistics" title="Thống kê">
+                <a href="#">
+                    <!--<i class="fas fa-globe"></i>-->
+                    <img src="~/google api/img/icon/statistics-icon-30.png" alt="Statistics" width="30" height="30" />
+                </a>
+
+            </li>
+            <li class="list-group-item list-group-item-action" id="info" title="Thông tin liên hệ">
+                <a href="#">
+                    <!--<i class="fas fa-globe"></i>-->
+                    <img src="~/google api/img/icon/info-icon-30.png" alt="Statistics" width="30" height="30" />
+                </a>
+
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div id="legendWrapper" style="z-index: 0; position: absolute; bottom: 26px; right: 0px; background-color:#D6DBDF">
+        <div id="legend">
+            <p>Mật độ cây</p>
+            <div>
+                <div class="density-color" style="background-color: #82E0AA"></div><span>0 - 25</span>
+            </div>
+            <div>
+                <div class="density-color" style="background-color: #52BE80"></div><span>25 - 50</span>
+            </div>
+            <div>
+                <div class="density-color" style="background-color: #17A589"></div><span>50 - 75</span>
+            </div>
+            <div>
+                <div class="density-color" style="background-color: #16A085"></div><span>75 - 100</span>
+            </div>
+        </div>
+    </div>
+
+    @*edit tree name modal*@
+    <div class="modal fade" id="edit-tree-name-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Chỉnh sửa loại cây</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        <input type="text" id="current-tree-name-input" class="form-control" readonly>
+                        <input type="text" id="id-input" hidden>
+                    </div>
+
+                    <div class="md-form mb-4">
+                        <input type="text" id="new-tree-name-input" class="form-control validate-input" placeholder="Tên cây mới">
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-default" id="save-edit-tree-name-btn"><i class="fa fa-save"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The History Modal -->
+    <div class="modal fade" id="history-info-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Lịch sử</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="table-wrapper-scroll-y table-responsive">
+                        <table class="table table-bordered table-hover " id="tree-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Ngày tháng</th>
+                                    <th>Nhân viên</th>
+                                    <th>Hoạt động</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--JS will take care of this-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Member")))
+                {
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" id="add-history-btn" class="btn btn-primary" data-dismiss="modal">Thêm hoạt động</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- The Create History Modal -->
+
+    <div class="modal fade" id="create-history-modal" tabindex="-1" role="dialog" aria-labelledby="create-history-modal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Thêm hoạt động</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-4">
+                        <label>Ngày chăm sóc</label>
+                        <input type="date" name="workdate" id="history-date-input" class="form-control">
+                    </div>
+
+                    <div class="md-form mb-4">
+                        <label>Nhân viên chắm sóc</label>
+                        <select id="history-user-select" class="a browser-default custom-select mb-2">
+                            @*JS will cover this*@
+                        </select>
+                    </div>
+
+                    <div class="md-form mb-4">
+                        <label>Hoạt động</label>
+                        <select id="history-name-select" class="a browser-default custom-select mb-2">
+                            @*JS will cover this*@
+                        </select>
+                    </div>
+
+                    <div class="md-form mb-4">
+                        <label>Chi tiết</label>
+                        <textarea id="history-detail-textarea" class="form-control" rows="4"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" id="save-history-btn"><i class="fa fa-save"></i></button>
+                    <button type="button" class="btn btn-primary" id="clear-history-btn"><i class="fa fa-eraser"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Delete tree detail*@
+    <div class="modal fade" id="delete-tree-detail-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-1">
+                    <div class="md-form mb-5">
+                        <label>Lý do loại bỏ cây </label>
+                        <textarea id="delete-tree-detail-textarea" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" id="delete-tree-submit-btn" class="btn btn-primary">Xác nhận loại bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- The Modal -->
+    <div class="modal" id="show-user-info-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thông tin người dùng</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Tên người dùng:</label>
+                            <input type="text" name="username" id="user-name" class="a form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Địa chỉ mail:</label>
+                            <input type="text" name="useremail" id="user-email" class="a form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label> Số điện thoại:</label>
+                            <input type="text" name="userphonenumber" id="user-phonenumber" class="a form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col"><h6>Phân vùng quản lý</h6></div>
+                    <div class="col">
+                        <div class="table-wrapper-scroll-y table-responsive">
+                            <table class="table table-bordered table-hover " id="polygon-managed-table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên phân vùng</th>
+                                        <th>Vị trí</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--JS will take care of this-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    @*transfer manage modal*@
+    <div class="modal fade" id="transfer-manage-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Thay thế quản lý khu vực</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-4">
+                        <label> Quản lý hiện tại:</label>
+                        <input type="text" name="username" id="manage-polygon-name" class="a form-control" readonly>
+                    </div>
+                    <div class="md-form mb-4">
+                        <label>Quản lý thay thế</label>
+                        <select id="replace-manager-select" class="a browser-default custom-select mb-2">
+                            @*JS will cover this*@
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-default" id="save-delete-user-btn"><i class="fa fa-save"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">Xoá cây thành công</div>
+    <script src="~/google api/markerclusterer.js"></script>
+    <script src="~/google api/index.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAsneDZkffDosfysVBk76UnrR85fbgoi4&libraries=drawing,geometry&callback=initMap"
+            async defer></script>
+</body>
+</html>

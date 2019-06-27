@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(local);Database=aspnet-GMS_Lite-4664A863-69F7-44FB-91A0-C8F3A19430F8;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}

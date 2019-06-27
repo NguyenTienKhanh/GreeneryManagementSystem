@@ -1,0 +1,116 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/register/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/register/css/main.css">
+<!--===============================================================================================-->
+
+<div class="container-contact100">
+    @*<div class="contact100-map" id="google_map" data-map-x="40.722047" data-map-y="-73.986422" data-pin="~/register/images/icons/map-marker.png" data-scrollwhell="0" data-draggable="1"></div>*@
+    <div class="contact100-map" style="background: url(/login/images/login-background.jpg); background-position: center; background-repeat:no-repeat; background-size:cover;"></div>
+    <div class="wrap-contact100">
+        <div class="contact100-form-title" style="background-image: url(/register/images/bg-01.jpg);">
+            <span class="contact100-form-title-1">
+                Đăng Ký
+            </span>
+            <span class="contact100-form-title-2">
+                Điền thông tin cần thiết bên dưới !
+            </span>
+        </div>
+
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="contact100-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="wrap-input100">
+                <span class="label-input100"> Username:</span>
+                <input asp-for="Input.Username" class="input100" placeholder="Enter username">
+                <span asp-validation-for="Input.Username" class="text-danger focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100">
+                <span class="label-input100">Email:</span>
+                <input asp-for="Input.Email" class="input100" placeholder="Enter email addess">
+                <span asp-validation-for="Input.Email" class="text-danger focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100">
+                <span class="label-input100">Password:</span>
+                <input asp-for="Input.Password" class="input100" placeholder="Enter password">
+                <span asp-validation-for="Input.Password" class="text-danger focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100">
+                <span class="label-input100">Confirm Password:</span>
+                <input asp-for="Input.ConfirmPassword" class="input100" placeholder="Enter confirm password">
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger focus-input100"></span>
+            </div>
+
+            <div class="container-contact100-form-btn">
+                <button type="submit" class="contact100-form-btn">
+                    <span>
+                        Đồng ý
+                        <i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+<script src="~/register/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/register/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/register/vendor/bootstrap/js/popper.js"></script>
+<script src="~/register/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/register/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/register/vendor/daterangepicker/moment.min.js"></script>
+<script src="~/register/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="~/register/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+<script src="~/register/js/main.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
+</script>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

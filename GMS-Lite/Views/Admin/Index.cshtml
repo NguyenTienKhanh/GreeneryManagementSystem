@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/admin/css/spinner.css" />
+<script type="text/javascript" src="~/admin/lib/main.js"></script>
+<div>
+    <h5>Thông Tin Đăng Ký Cây</h5>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tài Khoản</th>
+                <th>Thời Gian Đệ Trình</th>
+                <th>Thông Tin Cây</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- The Tree Info Modal -->
+<div class="modal fade" id="infoModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Thông Tin Cây</h4>
+                <button type="button" class="close out" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="column-span: all">
+                <div class="lds-ring">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger out" data-dismiss="modal">Đóng</button>
+            </div>
+
+        </div>
+    </div>
+</div>

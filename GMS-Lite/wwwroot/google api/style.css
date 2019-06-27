@@ -1,0 +1,384 @@
+﻿/* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+#map {
+    height: 95%;
+    width: 100%;
+    float: left;
+    position: absolute;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    min-width: 1000px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#slide-panel {
+    height: 95%;
+    width: 25%;
+    background: white;
+    float: left;
+}
+
+/*Button*/
+.sidebar-footer {
+    display: flex;
+    top: 0px;
+    left: 0px;
+    border-radius: 0px;
+    width: auto;
+    height: 95%;
+    background-color: white;
+    z-index: 1000;
+    float: left;
+    position: relative;
+    box-shadow: 5px 6px 15px 0px rgba(0,0,0,1);
+}
+
+ul li {
+    cursor: pointer;
+}
+
+.nav {
+    padding-left: 0;
+}
+
+.navbar {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.collapse-tabs {
+    height: 90%;
+}
+
+.filter-header-btn {
+    height: 60px;
+    width: 100%;
+    background-color: #3d7d4e;
+}
+
+.collapse-btn {
+    font-size: 23px;
+    color: #fff;
+    cursor: default;
+    height: 60px;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+}
+
+.tree-name-btn {
+    height: auto;
+    width: 46.5%;
+    margin: 5.5px;
+    border: 1px solid rgba(0, 123, 255, .25);
+    display: flex;
+    overflow: hidden;
+    border: 1px;
+    font-size: 15px;
+    box-shadow: 0 0 1px #ccc;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-out;
+    -webkit-box-shadow: 0px 0px 0 0 #31708f inset, 0px 0px 0 #31708f inset;
+    border-radius: 5px;
+}
+
+    .tree-name-btn .active {
+        background-color: dodgerblue;
+        text-decoration-color: white;
+    }
+
+    .tree-name-btn:hover {
+    }
+
+.list-button button {
+    display: inline-flex;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 1.25rem;
+    background-color: #fff;
+}
+
+.list-button {
+    height: 70vh;
+    max-height: 80vh;
+    overflow-y: scroll;
+}
+
+/* End Filter style*/
+/*Scroll bar style*/
+::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #000;
+    border-radius: 5px;
+}
+
+    ::-webkit-scrollbar-thumb:active {
+        background: #31708f;
+    }
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+
+    ::-webkit-scrollbar-track:hover {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-track:active {
+        background: transparent;
+    }
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Duong Edit AreaInformation */
+.table-wrapper-scroll-y {
+    display: block;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    font-size: 15px;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow-y:scroll;
+}
+
+.manage-user-table-class {
+    height: auto;
+    max-height: 60vh;
+}
+
+.tree-name-table-class {
+    height: auto;
+    max-height: 60vh;
+}
+
+.coordinate-table-class{
+    height: auto;
+    max-height: 20vh;
+}
+.tree-table-class{
+    height: auto;
+    max-height: 25vh;
+}
+
+
+#GMS-header {
+    font-size: 2.5vh;
+    color: #fff;
+}
+
+#navbar-gms {
+    height: 5%;
+    min-height: 20px;
+    background-color: #03a9f4 !important;
+}
+
+td, th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: auto;
+    padding: 0px 0px 5px 0px !important;
+    vertical-align:middle!important;
+    line-height:1.5;
+}
+
+th {
+    font-size: larger !important;
+    font-weight: 600 !important;
+    color: #212529 !important;
+}
+
+select.browser-default[disabled], input.form-control[readonly], textarea.form-control[readonly] {
+    background-color: white;
+}
+
+input[type=text] {
+    padding-left: 10px;
+}
+
+textarea{
+    padding-left:10px!important;
+}
+
+.my-container {
+    display: none;
+    height: 100%;
+}
+
+    .my-container:not(#filter-container) {
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+
+.fixed-width {
+    min-width: 300px;
+}
+
+.relative-position {
+    position: relative;
+}
+
+/*Error message style*/
+
+/* Duong */
+#legendWrapper {
+    background-color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.density-color {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+    float: left;
+    display: block;
+}
+/* Validate style*/
+.has-danger {
+    color: #f44336;
+}
+
+.list-group-item :first-child {
+    margin-right: 0;
+}
+
+.list-group {
+    padding: 0;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+
+.form-control {
+    padding: 0rem;
+}
+
+label, p {
+    margin-bottom: 0rem;
+    font-size: 1rem !important;
+    top: 0.5rem !important;
+    left: 0 !important;
+}
+
+#seeding-container, #filter-container, #partition-container, #register-polygon-container, #manage-user-container, #manage-tree-name-container, #statistics-container {
+    padding: 0.5rem;
+    background-color: aliceblue;
+}
+
+.bmd-label {
+    color: #03a9f4;
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+    /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    #snackbar.show {
+        visibility: visible; /* Show the snackbar */
+        /* Add animation: Take 0.5 seconds to fade in */
+        -webkit-animation: fadein 0.5s;
+        animation: fadein 0.5s;
+    }
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+
+form p {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 0.4;
+    padding: 0.5rem;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.bmd-label-static {
+    font-size: medium;
+    font-weight: bold;
+    color: black;
+}
+
+.bmd-form {
+    top: 0.5rem;
+    left: 0;
+}
+
+.gm-style-iw-c {
+    padding: 12px !important;
+}
+
+.gm-style-iw-d {
+    overflow: unset !important;
+}
+
+h3 {
+    font-weight: bold;
+    color: forestgreen;
+}
+
+    h3.mb-4 {
+        margin-bottom: 0;
+    }
+
+.gm-style .gm-style-iw-c {
+    height: auto;
+    max-height: 50vh;
+    overflow-y: scroll!important;
+}
